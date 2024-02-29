@@ -6,6 +6,11 @@ import {
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
+
+<nav className="hidden md:flex md:items-center space-x-4">
+  <a href="#" className="text-white font-inter">Login</a>
+</nav>
+
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
   {
