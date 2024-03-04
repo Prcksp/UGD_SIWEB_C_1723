@@ -16,7 +16,7 @@ export default function Page() {
       <div className="mt-4 flex-grow flex flex-col md:flex-row z-10 gap-4">
         <div className="flex flex-col justify-center gap-6 bg-gray-50 bg-opacity-0 rounded-lg px-6 py-10 md:w-2/5 md:px-20">
           <p className={`text-3xl text-slate-50 md:text-3xl md:leading-normal ${kanit.className}`}>221711723 - Patrick Everest Bhuwana Putra Somba</p>
-            <p className={`md:text-7xl text-7xl text-white md:leading-normal  ${anton.className} `}>Our Barbershop Admin Dashboard</p>
+            <p className={`md:text-5xl text-7xl text-white md:leading-normal  ${anton.className} `}>Our Barbershop Admin Dashboard</p>
         </div>
       </div>
       <header className="w-full bg-transparent">
