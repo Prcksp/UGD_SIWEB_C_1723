@@ -47,6 +47,12 @@ const customers = [
     image_url: '/customers/michael-novotny.png',
   },
   {
+    id: '13D07535-C59E-4157-A011-F8D2EF4E0CBB',
+    name: 'Patrick Everest',
+    email: '221711723',
+    image_url: '/customers/evil-rabbit.png',
+  },
+  {
     id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa',
     name: 'Evil Rabbit',
     email: 'evil@rabbit.com',
@@ -165,6 +171,15 @@ const invoices = [
   },
 ];
 
+const reservations =[
+  {
+    customer_id: customers[7].id,
+    amount:  1000,
+    status: 'paid',
+    date: '2024-03-23',
+  }
+];
+
 const revenue = [
   { month: 'Jan', revenue: 2000 },
   { month: 'Feb', revenue: 1800 },
@@ -185,4 +200,5 @@ module.exports = {
   customers,
   invoices,
   revenue,
+  reservations,
 };
