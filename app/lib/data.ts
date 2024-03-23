@@ -96,6 +96,7 @@ export async function fetchCardData() {
 }
 
 const ITEMS_PER_PAGE = 6;
+
 export async function fetchFilteredReservations(
   query: string,
   currentPage: number,

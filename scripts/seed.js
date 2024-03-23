@@ -132,6 +132,7 @@ async function seedReservations(client) {
     throw error;
   }
 }
+
 async function seedCustomers(client) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -219,7 +220,6 @@ async function main() {
 
   await client.end();
 }
-
 
 main().catch((err) => {
   console.error(

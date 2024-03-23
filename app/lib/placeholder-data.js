@@ -49,7 +49,7 @@ const customers = [
   {
     id: '13D07535-C59E-4157-A011-F8D2EF4E0CBB',
     name: 'Patrick Everest',
-    email: '221711723',
+    email: '221711723', 
     image_url: '/customers/evil-rabbit.png',
   },
   {
@@ -202,3 +202,4 @@ module.exports = {
   revenue,
   reservations,
 };
+
