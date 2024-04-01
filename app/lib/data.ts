@@ -1,4 +1,5 @@
 import { sql } from '@vercel/postgres';
+import { unstable_noStore as noStore } from 'next/cache';
 import {
   CustomerField,
   CustomersTableType,
@@ -8,7 +9,7 @@ import {
   User,
   Revenue,
   ReservationsTable,
-  LatestReservationsRaw,
+  LatestReservationRaw,
   ReservationForm,
 } from './definitions';
 import { unstable_noStore } from 'next/cache';
@@ -16,19 +17,18 @@ import { formatCurrency } from './utils';
 
 
 export async function fetchRevenue() {
-  // Add noStore() here to prevent the response from being cached.
-  // This is equivalent to in fetch(..., {cache: 'no-store'}).
+  noStore();
 
   try {
     // Artificially delay a response for demo purposes.
     // Don't do this in production :)
 
-    // console.log('Fetching revenue data...');
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
+   console.log('Fetching revenue data...');
+   await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const data = await sql<Revenue>`SELECT * FROM revenue`;
 
-    // console.log('Data fetch completed after 3 seconds.');
+    console.log('Data fetch completed after 3 seconds.');
 
     return data.rows;
   } catch (error) {
@@ -40,7 +40,7 @@ export async function fetchRevenue() {
 export async function fetchLatestReservations() {
   try {
     unstable_noStore();
-    const data = await sql<LatestReservationsRaw>`
+    const data = await sql<LatestReservationRaw>`
       SELECT reservations.amount, customers.name, customers.image_url, customers.email, reservations.id
       FROM reservations
       JOIN customers ON reservations.customer_id = customers.id
@@ -59,8 +59,31 @@ export async function fetchLatestReservations() {
   }
 }
 
+export async function fetchLatestInvoices() {
+   noStore();
+  try {
+    unstable_noStore();
+    const data = await sql<LatestInvoiceRaw>`
+      SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
+      FROM invoices
+      JOIN customers ON invoices.customer_id = customers.id
+      ORDER BY invoices.date DESC
+      LIMIT 6`;
+
+
+    const LatestInvoices = data.rows.map((invoices) => ({
+      ...invoices,
+      amount: formatCurrency(invoices.amount),
+    }));
+    return LatestInvoices;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch the latest invoices.');
+  }
+}
 
 export async function fetchCardData() {
+  noStore();
   try {
     // You can probably combine these into a single SQL query
     // However, we are intentionally splitting them to demonstrate
@@ -97,6 +120,44 @@ export async function fetchCardData() {
 
 const ITEMS_PER_PAGE = 6;
 
+export async function fetchFilteredInvoices(
+  query: string,
+  currentPage: number,
+) {
+  noStore();
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+
+  try {
+    const invoices = await sql<InvoicesTable>`
+      SELECT
+      invoices.id,
+      invoices.amount,
+      invoices.date,
+      invoices.status,
+        customers.name,
+        customers.email,
+        customers.image_url
+      FROM invoices
+      JOIN customers ON invoices.customer_id = customers.id
+      WHERE
+        customers.name ILIKE ${`%${query}%`} OR
+        customers.email ILIKE ${`%${query}%`} OR
+        invoices.amount::text ILIKE ${`%${query}%`} OR
+        invoices.date::text ILIKE ${`%${query}%`} OR
+        invoices.status ILIKE ${`%${query}%`}
+      ORDER BY invoices.date DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+
+
+    return invoices.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch invoices.');
+  }
+}
+
 export async function fetchFilteredReservations(
   query: string,
   currentPage: number,
@@ -105,7 +166,7 @@ export async function fetchFilteredReservations(
 
 
   try {
-    const invoices = await sql<ReservationsTable>`
+    const reservations = await sql<ReservationsTable>`
       SELECT
       reservations.id,
       reservations.amount,
@@ -127,14 +188,36 @@ export async function fetchFilteredReservations(
     `;
 
 
-    return invoices.rows;
+    return reservations.rows;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch reservations.');
   }
 }
 
-export async function fetchReservationsPage(query: string) {
+export async function fetchInvoicesPages(query: string) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM invoices
+    JOIN customers ON invoices.customer_id = customers.id
+    WHERE
+      customers.name ILIKE ${`%${query}%`} OR
+      customers.email ILIKE ${`%${query}%`} OR
+      invoices.amount::text ILIKE ${`%${query}%`} OR
+      invoices.date::text ILIKE ${`%${query}%`} OR
+      invoices.status ILIKE ${`%${query}%`}
+  `;
+
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of invoices.');
+  }
+}
+
+export async function fetchReservationsPages(query: string) {
   try {
     const count = await sql`SELECT COUNT(*)
     FROM reservations
@@ -179,6 +262,31 @@ export async function fetchInvoiceById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch invoice.');
+  }
+}
+
+export async function fetchResevationsById(id: string) {
+  try {
+    const data = await sql<ReservationForm>`
+      SELECT
+        reservations.id,
+        reservations.customer_id,
+        reservations.amount,
+        reservations.status
+      FROM reservations
+      WHERE reservations.id = ${id};
+    `;
+
+    const reservations = data.rows.map((reservations) => ({
+      ...reservations,
+      // Convert amount from cents to dollars
+      amount: reservations.amount / 100,
+    }));
+
+    return reservations[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch reservations.');
   }
 }
 
@@ -242,3 +350,4 @@ export async function getUser(email: string) {
     throw new Error('Failed to fetch user.');
   }
 }
+

@@ -31,7 +31,7 @@ export type Revenue = {
   revenue: number;
 };
  
-export type LatestReservations = {
+export type LatestReservation = {
   id: string;
   name: string;
   image_url: string;
@@ -40,17 +40,14 @@ export type LatestReservations = {
 };
  
  
-export type LatestReservationsRaw = Omit<LatestReservations, 'amount'> & {
+export type LatestReservationRaw = Omit<LatestReservation, 'amount'> & {
   amount: number;
 };
  
  
-export type ReservationsTable = {
+export type Reservation = {
   id: string;
   customer_id: string;
-  name: string;
-  email: string;
-  image_url: string;
   date: string;
   amount: number;
   status: 'pending' | 'paid';
@@ -73,7 +70,6 @@ export type LatestInvoice = {
   amount: string;
 };
  
-// The database returns a number for amount, but we later format it to a string with the formatCurrency function
 export type LatestInvoiceRaw = Omit<LatestInvoice, 'amount'> & {
   amount: number;
 };
@@ -130,9 +126,9 @@ export type LatestReservations = {
 };
  
  
-export type LatestReservationsRaw = Omit<LatestReservations, 'amount'> & {
-  amount: number;
-};
+// export type LatestReservationsRaw = Omit<LatestReservations, 'amount'> & {
+//   amount: number;
+// };
  
  
 export type ReservationsTable = {
@@ -147,9 +143,9 @@ export type ReservationsTable = {
 };
  
  
-export type ReservationForm = {
-  id: string;
-  customer_id: string;
-  amount: number;
-  status: 'pending' | 'paid';
-};
+// export type ReservationForm = {
+//   id: string;
+//   customer_id: string;
+//   amount: number;
+//   status: 'pending' | 'paid';
+// };
