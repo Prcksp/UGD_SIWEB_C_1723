@@ -11,7 +11,7 @@ export default async function Page() {
         breadcrumbs={[
           { label: 'Reservations', href: '/dashboard/Reservations' },
           {
-            label: 'Create Invoice',
+            label: 'Create Reservation',
             href: '/dashboard/Reservations/create',
             active: true,
           },
