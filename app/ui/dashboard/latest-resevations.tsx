@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
 import {fetchLatestReservations } from '@/app/lib/data';
 
-export default async function LatestReservations() { 
+export default async function LatestReservations() { // Remove props
   const latestReservations = await fetchLatestReservations();
   return (
     <div className="flex w-full flex-col md:col-span-4">
@@ -13,6 +13,7 @@ export default async function LatestReservations() {
       </h2>
       <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
         {/* NOTE: comment in this code when you get to this point in the course */}
+
         <div className="bg-white px-6">
           {latestReservations.map((reservations, i) => {
             return (
@@ -59,4 +60,3 @@ export default async function LatestReservations() {
     </div>
   );
 }
-

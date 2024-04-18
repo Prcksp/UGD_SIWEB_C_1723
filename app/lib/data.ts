@@ -37,6 +37,27 @@ export async function fetchRevenue() {
   }
 }
 
+export async function fetchLatestInvoices() {
+  try {
+    const data = await sql<LatestInvoiceRaw>`
+      SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
+      FROM invoices
+      JOIN customers ON invoices.customer_id = customers.id
+      ORDER BY invoices.date DESC
+      LIMIT 5`;
+
+    const latestInvoices = data.rows.map((invoice) => ({
+      ...invoice,
+      amount: formatCurrency(invoice.amount),
+    }));
+    return latestInvoices;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch the latest invoices.');
+  }
+}
+
+
 export async function fetchLatestReservations() {
   try {
     unstable_noStore();
@@ -46,7 +67,6 @@ export async function fetchLatestReservations() {
       JOIN customers ON reservations.customer_id = customers.id
       ORDER BY reservations.date DESC
       LIMIT 1`;
-
 
     const LatestReservations = data.rows.map((reservations) => ({
       ...reservations,
@@ -59,30 +79,7 @@ export async function fetchLatestReservations() {
   }
 }
 
-export async function fetchLatestInvoices() {
-   noStore();
-  try {
-    unstable_noStore();
-    const data = await sql<LatestInvoiceRaw>`
-      SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
-      FROM invoices
-      JOIN customers ON invoices.customer_id = customers.id
-      ORDER BY invoices.date DESC
-      LIMIT 6`;
-
-
-    const LatestInvoices = data.rows.map((invoices) => ({
-      ...invoices,
-      amount: formatCurrency(invoices.amount),
-    }));
-    return LatestInvoices;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch the latest invoices.');
-  }
-}
-
-export async function fetchCardData() {
+export default async function fetchCardData() {
   noStore();
   try {
     // You can probably combine these into a single SQL query
