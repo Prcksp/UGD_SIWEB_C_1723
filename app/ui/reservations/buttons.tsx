@@ -26,9 +26,9 @@ export function UpdateReservations({ id }: { id: string }) {
 }
 
 export function DeleteReservation({ id }: { id: string }) {
-  const deleteReservationWithId = deleteReservation.bind(null, id);
+  const deleteResevationsById = deleteReservation.bind(null, id);
   return (
-    <form action={deleteReservationWithId}>
+    <form action={deleteResevationsById}>
       <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Delete</span>
         <TrashIcon className="w-5" />

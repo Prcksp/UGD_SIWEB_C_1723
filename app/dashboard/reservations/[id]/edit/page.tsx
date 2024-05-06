@@ -1,13 +1,19 @@
 import Form from '@/app/ui/reservations/edit-form';
 import Breadcrumbs from '@/app/ui/reservations/breadcrumbs';
-import { fetchInvoiceById, fetchCustomers } from '@/app/lib/data';
+import { fetchResevationsById, fetchCustomers } from '@/app/lib/data';
+import { updateReservation } from '@/app/lib/actions';
+import { notFound } from 'next/navigation';
  
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
     const [reservations, customers] = await Promise.all([
-        fetchInvoiceById(id),
+      fetchResevationsById(id),
         fetchCustomers(),
       ]);
+
+      if (!reservations) {
+        notFound();
+      }
 
     return (
         <main>
@@ -21,7 +27,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               },
             ]}
           />
-          <Form reservation={reservations} customers={customers} />
+          <Form reservations={reservations} customers={customers} />
         </main>
       );
     }

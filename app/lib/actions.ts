@@ -21,11 +21,17 @@ export async function updateReservation(id: string, formData: FormData) {
       status: formData.get('status'),
     });
     const amountInCents = amount * 100;
-    await sql`
-      UPDATE reservations
-      SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
-      WHERE id = ${id}
-    `;
+
+    try {
+      await sql`
+          UPDATE invoices
+          SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+          WHERE id = ${id}
+        `;
+    } catch (error) {
+      return { message: 'Database Error: Failed to Update Reservation.' };
+    }
+
     revalidatePath('/dashboard/reservations');
     redirect('/dashboard/reservations');
   }
@@ -39,16 +45,29 @@ export async function createReservations(formData: FormData) {
   const amountInCents = amount * 100;
   const date = new Date().toISOString().split('T')[0];
  
+  try{
   await sql`
     INSERT INTO reservations (customer_id, amount, status, date)
     VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
   `;
+} catch (error) {
+  return {
+    message: 'Database Error: Failed to Create Reservation.',
+  };
+}
  
   revalidatePath('/dashboard/reservations');
   redirect('/dashboard/reservations');
 }
  
 export async function deleteReservation(id: string) {
+  throw new Error('Failed to Delete Reservation');
+  
+  try {
     await sql`DELETE FROM reservations WHERE id = ${id}`;
     revalidatePath('/dashboard/reservations');
+    return { message: 'Deleted Reservation.'};
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete Invoice.' };
   }
+}

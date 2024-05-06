@@ -12,15 +12,15 @@ import { Button } from '@/app/ui/button';
 import { updateReservation } from '@/app/lib/actions';
 
 export default function EditreservationForm({
-  reservation,
+  reservations,
   customers,
 }: {
-  reservation: ReservationForm;
+  reservations: ReservationForm;
   customers: CustomerField[];
 }) {
-  const updateReservationWithId = updateReservation.bind(null, reservation.id);
+  const updateResevationsById = updateReservation.bind(null, reservations.id);
   return (
-    <form action={updateReservationWithId}>
+    <form action={updateResevationsById}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
@@ -32,7 +32,7 @@ export default function EditreservationForm({
               id="customer"
               name="customerId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue={reservation.customer_id}
+              defaultValue={reservations.customer_id}
             >
               <option value="" disabled>
                 Select a customer
@@ -59,7 +59,7 @@ export default function EditreservationForm({
                 name="amount"
                 type="number"
                 step="0.01"
-                defaultValue={reservation.amount}
+                defaultValue={reservations.amount}
                 placeholder="Enter USD amount"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
@@ -81,7 +81,7 @@ export default function EditreservationForm({
                   name="status"
                   type="radio"
                   value="pending"
-                  defaultChecked={reservation.status === 'pending'}
+                  defaultChecked={reservations.status === 'pending'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -97,7 +97,7 @@ export default function EditreservationForm({
                   name="status"
                   type="radio"
                   value="paid"
-                  defaultChecked={reservation.status === 'paid'}
+                  defaultChecked={reservations.status === 'paid'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label

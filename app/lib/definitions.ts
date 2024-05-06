@@ -57,9 +57,11 @@ export type Reservation = {
 export type ReservationForm = {
   id: string;
   customer_id: string;
+  date: string;
   amount: number;
   status: 'pending' | 'paid';
 };
+ 
  
  
 export type LatestInvoice = {
