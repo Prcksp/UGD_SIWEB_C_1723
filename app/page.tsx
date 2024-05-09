@@ -1,59 +1,45 @@
+import Image from "next/image";
 import { kanit, anton } from '@/app/ui/fonts';
-import Image from 'next/image';
 import Link from 'next/link';
-import { UserIcon, ArrowRightCircleIcon } from
-'@heroicons/react/24/outline';
-
-export default function Page() {
+import { ArrowRightCircleIcon } from '@heroicons/react/24/outline';
+ 
+const Home = () => {
   return (
-    <main className="flex min-h-screen flex-col p-6 bg-no-repeat bg-cover bg-center" style={{backgroundImage: "url('/bg_hero.png')"}}>
-      <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
-        <div className="flex flex-col justify-center gap-6 rounded-lg px-6 py-10 md:w-2/5 md:px-20">
-          
-        <header className="fixed inset-x-0 top-0 z-10 w-full px-4 py-1 bg-transparent flex justify-between items-center">
-        <div className={`${kanit.className} text-2xl leading-3xl text-white flex items-center`}>
-          <Image
-          src="/logo_hero.png" 
-          alt="logo" 
-          width={40} 
-          height={40} 
-          style={{ marginRight: '20px' }}
-          />
-          <p 
-          >Atma Barbershop
-          </p>
-        </div>
-        <button className="px-5 py-1 text-white hover:underline md:hidden">
-            <UserIcon className="w-7" />
-        </button>
-        <button className="px-5 py-1 text-white border-white border-2 bg-transparent rounded-lg hover:underline hidden md:block">
-            Login
-        </button>
-      </header>
-          <p
-      className={`${kanit.className} text-xl text-white md:text-xl md:leading-normal`}
-    >
-        221711723 – Patrick Everest Bhuwana Putra Somba
-          </p>
-          <p
-      className={`${anton.className} text-6xl text-white md:text-5xl md:leading-normal`}
-    >
-         Our Barbershop Admin Dashboard
-          </p>
-          <Link
-            href= '/dashboard'
-          >
-            <h1
-            className={`${kanit.className} antialiased flex text-white
-            text-[20px] hover:text-teal-500`}
-          >
-            Go to Dashboard
-            <ArrowRightCircleIcon className='w-6 mx-2'/>
+    <div className="flex flex-col min-h-screen">
+      <header className="p-0 m-0 relative" style={{ backgroundImage: 'url(/bg_hero.png)', backgroundSize: 'cover', height: '100vh' }}>
+        <div className="absolute top-1/2 left-1/3 transform -translate-x-1/2 -translate-y-1/2 text-justify text-white">
+          <h1 className={`${kanit.className}  text-2xl font-kanit mb-4`}>221711723 - Patrick Everest Bhuwana Putra Somba</h1>
+          <h1 className={`${anton.className} text-7xl font-anton mb-4 font-bold`}>Our Barbershop</h1>
+          <h1 className={`${anton.className} text-7xl font-anton mb-4 font-bold`}> Admin Dashboard</h1>
+          <Link href="/dashboard">
+            <h1 className={`${kanit.className} antialiased flex text-white text-[20px] hover:text-teal-500`}>
+              Go to Dashboard
+              <ArrowRightCircleIcon className='w-6 mx-2' />
             </h1>
           </Link>
-
         </div>
-      </div>
-    </main>
+ 
+        <div className="container mx-auto flex items-center justify-between">
+          <div className="flex-shrink-0 flex items-center">
+            <div className="mr-2">
+              <Image src="/logo_hero.png" alt="Hero Logo" width={40} height={40} />
+            </div>
+            <span className="text-white font-kanit">Atma BarberShop</span>
+          </div>
+          <nav className="hidden md:flex items-center space-x-4">
+ 
+            <a href="/login" className="px-6 py-2 text-black transition duration-700 ease-out bg-white border border-black rounded-lg hover:bg-black hover:border hover:text-white dark:border-white dark:bg-inherit dark:text-white dark:hover:bg-white dark:hover:text-black">Login</a>
+          </nav>
+          <div className="md:hidden">
+            <button className="text-white focus:outline-none">
+              {/* <UserIcon className="w-6 h-6" /> */}
+            </button>
+            <Image src="/logo_akun.png" alt="Hero Logo Mobile" width={40} height={40} />
+          </div>
+        </div>
+      </header>
+    </div>
   );
-}
+};
+ 
+export default Home;

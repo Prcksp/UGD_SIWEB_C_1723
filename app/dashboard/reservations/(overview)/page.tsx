@@ -4,6 +4,12 @@ import Table from '@/app/ui/reservations/table';
 import { CreateReservations } from '@/app/ui/reservations/buttons';
 import { lusitana } from '@/app/ui/fonts';
 import { fetchReservationsPages, fetchLatestReservations } from '@/app/lib/data';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Reservations | Atma barbershop Dashboard',
+};
+
 
 export default async function Page({
   searchParams,
